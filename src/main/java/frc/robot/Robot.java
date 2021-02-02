@@ -16,6 +16,9 @@ import static frc.robot.Constants.*;
  * the package after creating this project, you must also update the build.gradle file in the
  * project.
  */
+
+// Hello!
+
 public class Robot extends TimedRobot {
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
