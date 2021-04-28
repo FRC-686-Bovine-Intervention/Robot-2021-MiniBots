@@ -22,7 +22,7 @@ public class Drivetrain {
     private MyJoystick joystick;
 
     private TalonSRX leftMotor, rightMotor;
-    private static final boolean kLeftInversion = false;
+    private static final boolean kLeftInversion = true;
     private static final boolean kLeftSensorPhase = false;
     private static final boolean kRightInversion = false;
     private static final boolean kRightSensorPhase = false;
@@ -53,6 +53,9 @@ public class Drivetrain {
         double yInput = joystick.getYAxis();
         double leftPower = (yInput+xInput)/2;
         double rightPower = (yInput-xInput)/2;
+        leftPower*=joystick.getSliderAxis();
+        rightPower*=joystick.getSliderAxis();
+        System.out.println(rightPower);
         setPower(leftPower, rightPower);
     }
 
