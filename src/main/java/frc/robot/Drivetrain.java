@@ -44,15 +44,18 @@ public class Drivetrain {
         rightMotor.setSensorPhase(kRightSensorPhase);
     }
 
-    public void init(){
+    public void init(){ //british be like
         setPower(0, 0);
     }
 
     public void onLoop(){
         double xInput = joystick.getXAxis();
         double yInput = joystick.getYAxis();
-        double leftPower = (yInput+xInput)/2;
+        System.out.println(xInput + " " + yInput);
+        double leftPower = (yInput+xInput)/-2;
         double rightPower = (yInput-xInput)/2;
+        leftPower *= 1+1*joystick.getBigBooostButton();
+        rightPower *= 1+1*joystick.getBigBooostButton();
         setPower(leftPower, rightPower);
     }
 

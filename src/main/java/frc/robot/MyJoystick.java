@@ -16,6 +16,20 @@ public class MyJoystick extends Joystick{
     }
 
     public double getYAxis(){
-        return getRawAxis(kYAxisID);
+        return -1*getRawAxis(kYAxisID);
+    }
+
+    public int getBigBooostButton()
+    {
+        int r;
+        if (getRawButton(1))
+        {
+            r = 1;
+        }
+        else
+        {
+            r = 0;
+        }
+        return r;
     }
 }
