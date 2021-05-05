@@ -21,7 +21,7 @@ public class Drivetrain {
 
     private MyJoystick joystick;
 
-    private TalonSRX leftMotor, rightMotor;
+    public TalonSRX leftMotor, rightMotor;
     private static final boolean kLeftInversion = false;
     private static final boolean kLeftSensorPhase = false;
     private static final boolean kRightInversion = false;
@@ -71,5 +71,21 @@ public class Drivetrain {
 
     public void setJoystick(MyJoystick joystick){
         this.joystick = joystick;
+    }
+
+    public double encoderUnitsToDegrees(double encoderUnits)
+    {
+        return encoderUnits/(2048/120);
+    }
+
+    public double degreesToDeath(double degrees)
+    {
+        return (Math.PI*degrees)/90;
+    }
+
+    public double wheelsToAngle(double leftWheel, double rightWheel)
+    {
+        double difference = leftWheel-rightWheel;
+        return Math.toDegrees(Math.atan2(difference, 6.65));
     }
 }

@@ -28,6 +28,10 @@ public class Robot extends TimedRobot {
   private MyJoystick mJoystick = new MyJoystick(kJoystickPort);
   private Drivetrain drivetrain = Drivetrain.getInstance();
 
+  private int direction;
+  private double autoTimer;
+  private double prevTime;
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -67,6 +71,9 @@ public class Robot extends TimedRobot {
     m_autoSelected = m_chooser.getSelected();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
+    direction = 0;
+    autoTimer = 1;
+    prevTime = 0;
   }
 
   /** This function is called periodically during autonomous. */
@@ -81,6 +88,35 @@ public class Robot extends TimedRobot {
         // Put default auto code here
         break;
     }
+    switch (direction)
+    {
+      case 0:
+        drivetrain.setPower(0.125, 0.125);
+      break;
+      case 1:
+        drivetrain.setPower(-0.125, 0.125);
+      break;
+      case 2:
+        drivetrain.setPower(-0.125, -0.125);
+      break;
+      case 3:
+        drivetrain.setPower(0.125, -0.125);
+      break;
+      default:
+        drivetrain.setPower(0, 0);
+      break;
+    }
+    if (autoTimer > 0)
+    {
+      autoTimer -= (System.currentTimeMillis()/1000-prevTime);
+    }
+    else
+    {
+      direction = (direction+1)%4;
+      autoTimer = 1;
+    }
+    prevTime = System.currentTimeMillis()/1000;
+    System.out.println(drivetrain.wheelsToAngle(drivetrain.degreesToDeath(drivetrain.encoderUnitsToDegrees(drivetrain.leftMotor.getSelectedSensorVelocity()/10)), drivetrain.degreesToDeath(drivetrain.encoderUnitsToDegrees(drivetrain.rightMotor.getSelectedSensorVelocity()/10))));
   }
 
   /** This function is called once when teleop is enabled. */
@@ -92,7 +128,8 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    drivetrain.onLoop();
+    //drivetrain.onLoop();
+    System.out.println(drivetrain.wheelsToAngle(drivetrain.degreesToDeath(drivetrain.encoderUnitsToDegrees(drivetrain.leftMotor.getSelectedSensorPosition()/10)), drivetrain.degreesToDeath(drivetrain.encoderUnitsToDegrees(drivetrain.rightMotor.getSelectedSensorPosition()/10))));
   }
 
   /** This function is called once when the robot is disabled. */
