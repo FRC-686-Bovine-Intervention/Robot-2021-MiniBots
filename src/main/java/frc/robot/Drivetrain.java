@@ -25,7 +25,7 @@ public class Drivetrain {
     private static final boolean kLeftInversion = true;
     private static final boolean kLeftSensorPhase = false;
     private static final boolean kRightInversion = false;
-    private static final boolean kRightSensorPhase = false;
+    private static final boolean kRightSensorPhase = true;
 
 
     private Drivetrain(){
@@ -55,7 +55,6 @@ public class Drivetrain {
         double rightPower = (yInput-xInput)/2;
         leftPower*=joystick.getSliderAxis();
         rightPower*=joystick.getSliderAxis();
-        System.out.println(rightPower);
         setPower(leftPower, rightPower);
     }
 
