@@ -25,7 +25,9 @@ public class Drivetrain {
     private static final boolean kLeftInversion = true;
     private static final boolean kLeftSensorPhase = false;
     private static final boolean kRightInversion = false;
-    private static final boolean kRightSensorPhase = false;
+    private static final boolean kRightSensorPhase = true;
+
+    private static final double kTicksPerRev = 11800;
 
 
     private Drivetrain(){
@@ -42,6 +44,7 @@ public class Drivetrain {
         rightMotor.setNeutralMode(NeutralMode.Coast);
         rightMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, kTalonPidIDx, kTalonTimeoutMs);
         rightMotor.setSensorPhase(kRightSensorPhase);
+        rightMotor.setSelectedSensorPosition(0);
     }
 
     public void init(){
@@ -71,5 +74,12 @@ public class Drivetrain {
 
     public void setJoystick(MyJoystick joystick){
         this.joystick = joystick;
+    }
+
+    public double getEncoderTicks(){
+        return rightMotor.getSelectedSensorPosition();
+    }
+    public double getDistance(){
+        return rightMotor.getSelectedSensorPosition()/11800.0*4.0*Math.PI;
     }
 }

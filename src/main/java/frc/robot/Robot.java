@@ -17,8 +17,6 @@ import static frc.robot.Constants.*;
  * project.
  */
 
-// Hello!
-
 public class Robot extends TimedRobot {
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
@@ -27,6 +25,17 @@ public class Robot extends TimedRobot {
 
   private MyJoystick mJoystick = new MyJoystick(kJoystickPort);
   private Drivetrain drivetrain = Drivetrain.getInstance();
+
+  public enum States {
+    State0,
+    State1,
+    State2,
+    State3, State4;
+  }
+
+  public States cState = States.State1;
+  public long startTime;
+  public States pState = States.State0;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -66,21 +75,52 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    m_autoSelected = m_chooser.getSelected();
-    // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
-    System.out.println("Auto selected: " + m_autoSelected);
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    switch (m_autoSelected) {
-      case kCustomAuto:
-        // Put custom auto code here
+    System.out.println(drivetrain.getDistance());
+    switch(cState){
+      case State1:
+        if (cState != pState){
+          pState=cState;
+          startTime=System.currentTimeMillis();
+          drivetrain.setPower(.1,.1);
+
+        }
+        if (drivetrain.getDistance()>=12){
+          cState=States.State2;
+          drivetrain.setPower(0,0);
+        }
         break;
-      case kDefaultAuto:
+      case State2:
+        if (cState != pState){
+          pState=cState;
+          startTime=System.currentTimeMillis();
+          drivetrain.setPower(0,.1);
+
+        }
+        if (drivetrain.getDistance()>=26){
+          cState=States.State1;
+          drivetrain.setPower(0,0);
+        }
+        break;
+      case State3:
+        if (cState != pState){
+          pState=cState;
+          startTime=System.currentTimeMillis();
+          drivetrain.setPower(.125,.125);
+
+        }
+        if (System.currentTimeMillis()-startTime>=3000){
+          cState=States.State4;
+          drivetrain.setPower(0,0);
+        }
+        break;
+      case State4:
+        break;
       default:
-        // Put default auto code here
         break;
     }
   }
