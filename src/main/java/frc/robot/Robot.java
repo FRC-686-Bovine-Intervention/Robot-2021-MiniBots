@@ -4,11 +4,17 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.GyroBase;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.actions.*;
 
 import static frc.robot.Constants.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -26,17 +32,11 @@ public class Robot extends TimedRobot {
   private MyJoystick mJoystick = new MyJoystick(kJoystickPort);
   private Drivetrain drivetrain = Drivetrain.getInstance();
 
-  public enum States {
-    State0,
-    State1,
-    State2,
-    State3, State4;
-  }
+  private AutoManager autoManager = new AutoManager();
 
-  public States cState = States.State1;
-  public long startTime;
-  public States pState = States.State0;
-
+  Pose cPose = new Pose(0, 0, 0);
+  double pLeftDist = 0;
+  double pRightDist = 0;
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -60,7 +60,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    //Hello!
+    
   }
 
   /**
@@ -75,54 +75,26 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    autoManager.reset();
+    List<Action> actions = new ArrayList<Action>();
+     //actions.add(new DriveToSeconds(3, 0.125));
+     //actions.add(new TurnToSeconds(2, 0.125));
+     //actions.add(new DriveToSeconds(1.5, .175));
+    actions.add(new DriveToDist(24, 0.125));
+    actions.add(new DriveToAngle(-Math.toRadians(90), 0.125));
+    actions.add(new DriveToDist(24, 0.125));
+    actions.add(new DriveToAngle(-Math.toRadians(90), 0.125));
+    actions.add(new DriveToDist(24, 0.125));
+    actions.add(new DriveToAngle(-Math.toRadians(90), 0.125));
+    actions.add(new DriveToDist(24, 0.125));
+    actions.add(new DriveToAngle(-Math.toRadians(90), 0.125));
+    autoManager.setActions(actions);
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    System.out.println(drivetrain.getDistance());
-    switch(cState){
-      case State1:
-        if (cState != pState){
-          pState=cState;
-          startTime=System.currentTimeMillis();
-          drivetrain.setPower(.1,.1);
-
-        }
-        if (drivetrain.getDistance()>=12){
-          cState=States.State2;
-          drivetrain.setPower(0,0);
-        }
-        break;
-      case State2:
-        if (cState != pState){
-          pState=cState;
-          startTime=System.currentTimeMillis();
-          drivetrain.setPower(0,.1);
-
-        }
-        if (drivetrain.getDistance()>=26){
-          cState=States.State1;
-          drivetrain.setPower(0,0);
-        }
-        break;
-      case State3:
-        if (cState != pState){
-          pState=cState;
-          startTime=System.currentTimeMillis();
-          drivetrain.setPower(.125,.125);
-
-        }
-        if (System.currentTimeMillis()-startTime>=3000){
-          cState=States.State4;
-          drivetrain.setPower(0,0);
-        }
-        break;
-      case State4:
-        break;
-      default:
-        break;
-    }
+    autoManager.runAuto();
   }
 
   /** This function is called once when teleop is enabled. */
@@ -134,7 +106,16 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    drivetrain.onLoop();
+    // drivetrain.onLoop();
+    // System.out.println("Right distance: " + drivetrain.getRightDistance());
+    // System.out.println("Left distance: " + drivetrain.getLeftDistance());
+
+    // TODO: something below this comment is broken
+    double leftDelta = drivetrain.getLeftDistance()-pLeftDist;
+    double rightDelta = drivetrain.getRightDistance()-pRightDist;
+    cPose = Odometry.updatePose(cPose, leftDelta, rightDelta, 13.4);
+    System.out.println("X: " + cPose.x + " Y: " + cPose.y + " Heading: " + Math.toDegrees(cPose.heading));
+    
   }
 
   /** This function is called once when the robot is disabled. */

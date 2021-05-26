@@ -23,11 +23,12 @@ public class Drivetrain {
 
     private TalonSRX leftMotor, rightMotor;
     private static final boolean kLeftInversion = true;
-    private static final boolean kLeftSensorPhase = false;
+    private static final boolean kLeftSensorPhase = true;
     private static final boolean kRightInversion = false;
     private static final boolean kRightSensorPhase = true;
 
     private static final double kTicksPerRev = 11800;
+    private static final double kWheelDiameter = 4.0;
 
 
     private Drivetrain(){
@@ -37,6 +38,7 @@ public class Drivetrain {
         leftMotor.setNeutralMode(NeutralMode.Coast);
         leftMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, kTalonPidIDx, kTalonTimeoutMs);
         leftMotor.setSensorPhase(kLeftSensorPhase);
+        leftMotor.setSelectedSensorPosition(0);
 
         rightMotor = new TalonSRX(kRightMotorID);
         rightMotor.configFactoryDefault();
@@ -58,7 +60,6 @@ public class Drivetrain {
         double rightPower = (yInput-xInput)/2;
         leftPower*=joystick.getSliderAxis();
         rightPower*=joystick.getSliderAxis();
-        System.out.println(rightPower);
         setPower(leftPower, rightPower);
     }
 
@@ -79,7 +80,10 @@ public class Drivetrain {
     public double getEncoderTicks(){
         return rightMotor.getSelectedSensorPosition();
     }
-    public double getDistance(){
-        return rightMotor.getSelectedSensorPosition()/11800.0*4.0*Math.PI;
+    public double getRightDistance(){
+        return rightMotor.getSelectedSensorPosition()/kTicksPerRev*kWheelDiameter*Math.PI;
+    }
+    public double getLeftDistance(){
+        return leftMotor.getSelectedSensorPosition()/kTicksPerRev*kWheelDiameter*Math.PI;
     }
 }
