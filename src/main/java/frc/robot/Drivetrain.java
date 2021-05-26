@@ -7,15 +7,12 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
-
-
-public class Drivetrain {
-
+public class Drivetrain 
+{
     private static Drivetrain instance = null;
-    public static Drivetrain getInstance(){
-        if(instance == null){
-            instance = new Drivetrain();
-        }
+    public static Drivetrain getInstance()
+    {
+        if(instance == null) {instance = new Drivetrain();}
         return instance;
     }
 
@@ -28,7 +25,8 @@ public class Drivetrain {
     private static final boolean kRightSensorPhase = false;
 
 
-    private Drivetrain(){
+    private Drivetrain()
+    {
         leftMotor = new TalonSRX(kLeftMotorID);
         leftMotor.configFactoryDefault();
         leftMotor.setInverted(kLeftInversion);
@@ -44,14 +42,16 @@ public class Drivetrain {
         rightMotor.setSensorPhase(kRightSensorPhase);
     }
 
-    public void init(){ //british be like
+    public void init() //british be like
+    {
         setPower(0, 0);
     }
 
-    public void onLoop(){
+    public void onLoop()
+    {    
+        if (joystick.getZeroButton()){leftMotor.setSelectedSensorPosition(0); rightMotor.setSelectedSensorPosition(0);}
         double xInput = joystick.getXAxis();
         double yInput = joystick.getYAxis();
-        System.out.println(xInput + " " + yInput);
         double leftPower = (yInput+xInput)/-2;
         double rightPower = (yInput-xInput)/2;
         leftPower *= 1+1*joystick.getBigBooostButton();
@@ -59,33 +59,26 @@ public class Drivetrain {
         setPower(leftPower, rightPower);
     }
 
-    public void onStop(){
+    public void onStop()
+    {
         setPower(0, 0);
     }
 
-
-    public void setPower(double leftPower, double rightPower){
+    public void setPower(double leftPower, double rightPower)
+    {
         leftMotor.set(ControlMode.PercentOutput, leftPower);
         rightMotor.set(ControlMode.PercentOutput, rightPower);
     }
 
-    public void setJoystick(MyJoystick joystick){
-        this.joystick = joystick;
-    }
+    public void setJoystick(MyJoystick joystick) {this.joystick = joystick;}
 
-    public double encoderUnitsToDegrees(double encoderUnits)
-    {
-        return encoderUnits/(2048/120);
-    }
+    public double encoderUnitsToDegrees(double encoderUnits) {return encoderUnits/(1024*4/360);}
 
-    public double degreesToDeath(double degrees)
-    {
-        return (Math.PI*degrees)/90;
-    }
+    public double gearRatio(double degrees) {return degrees/3;}
 
-    public double wheelsToAngle(double leftWheel, double rightWheel)
-    {
-        double difference = leftWheel-rightWheel;
-        return Math.toDegrees(Math.atan2(difference, 6.65));
-    }
+    public double degreesToDistance(double degrees) {return (Math.PI*degrees)/90;}
+
+    public double wheelsToAngle(double leftWheel, double rightWheel) {return 60;}
+
+    public double encoderUnitsToDistance(double encoderUnits) {return degreesToDistance(gearRatio(encoderUnitsToDegrees(encoderUnits)));}
 }
