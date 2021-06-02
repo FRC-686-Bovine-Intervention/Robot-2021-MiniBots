@@ -33,10 +33,8 @@ public class Robot extends TimedRobot {
   private Drivetrain drivetrain = Drivetrain.getInstance();
 
   private AutoManager autoManager = new AutoManager();
+  private Odometry odometry = new Odometry();
 
-  Pose cPose = new Pose(0, 0, 0);
-  double pLeftDist = 0;
-  double pRightDist = 0;
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -75,6 +73,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    odometry.setPose(0, 0, 0);
+
     autoManager.reset();
     List<Action> actions = new ArrayList<Action>();
      //actions.add(new DriveToSeconds(3, 0.125));
@@ -95,12 +95,14 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     autoManager.runAuto();
+    odometry.update();
   }
 
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
     drivetrain.init();
+    odometry.setPose(0,0,0);
   }
 
   /** This function is called periodically during operator control. */
@@ -110,12 +112,7 @@ public class Robot extends TimedRobot {
     // System.out.println("Right distance: " + drivetrain.getRightDistance());
     // System.out.println("Left distance: " + drivetrain.getLeftDistance());
 
-    // TODO: something below this comment is broken
-    double leftDelta = drivetrain.getLeftDistance()-pLeftDist;
-    double rightDelta = drivetrain.getRightDistance()-pRightDist;
-    cPose = Odometry.updatePose(cPose, leftDelta, rightDelta, 13.4);
-    System.out.println("X: " + cPose.x + " Y: " + cPose.y + " Heading: " + Math.toDegrees(cPose.heading));
-    
+    odometry.update(); 
   }
 
   /** This function is called once when the robot is disabled. */
