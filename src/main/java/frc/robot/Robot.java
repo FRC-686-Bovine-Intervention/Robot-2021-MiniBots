@@ -4,16 +4,19 @@
 
 package frc.robot;
 
+import static frc.robot.Constants.kJoystickPort;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.auto.AutoManager;
 import frc.robot.auto.actions.Action;
-
-import static frc.robot.Constants.*;
-
-import java.util.ArrayList;
-import java.util.List;
+import frc.robot.auto.actions.TestAction;
+import frc.robot.auto.actions.TestDriveAction;
+import frc.robot.auto.modes.TestMode;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -37,6 +40,8 @@ public class Robot extends TimedRobot {
   private int direction;
   private double autoTimer;
   private double prevTime;
+
+  //private TestAction testAction;
 
   private List<Action> actions = new ArrayList<Action>();
 
@@ -79,11 +84,8 @@ public class Robot extends TimedRobot {
     m_autoSelected = m_chooser.getSelected();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
-    direction = 0;
-    autoTimer = 1;
-    prevTime = 0;
 
-    autoManager.setActions(actions);
+    autoManager.setMode(new TestMode());
   }
 
   /** This function is called periodically during autonomous. */
@@ -97,37 +99,7 @@ public class Robot extends TimedRobot {
       default:
         // Put default auto code here
         break;
-    }
-    switch (direction)
-    {
-      case 0:
-        drivetrain.setPower(0.125, 0.125);
-      break;
-      case 1:
-        drivetrain.setPower(-0.125, 0.125);
-      break;
-      case 2:
-        drivetrain.setPower(-0.125, -0.125);
-      break;
-      case 3:
-        drivetrain.setPower(0.125, -0.125);
-      break;
-      default:
-        drivetrain.setPower(0, 0);
-      break;
-    }
-    if (autoTimer > 0)
-    {
-      autoTimer -= (System.currentTimeMillis()/1000-prevTime);
-    }
-    else
-    {
-      direction = (direction+1)%4;
-      autoTimer = 1;
-    }
-    prevTime = System.currentTimeMillis()/1000;
-    System.out.println(drivetrain.wheelsToAngle(drivetrain.degreesToDistance(drivetrain.encoderUnitsToDegrees(drivetrain.leftMotor.getSelectedSensorVelocity()/10)), drivetrain.degreesToDistance(drivetrain.encoderUnitsToDegrees(drivetrain.rightMotor.getSelectedSensorVelocity()/10))));
-    */
+    }*/
     autoManager.runAuto();
   }
 
