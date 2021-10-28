@@ -57,6 +57,7 @@ public class Drivetrain
         leftPower *= 1+1*joystick.getBigBooostButton();
         rightPower *= 1+1*joystick.getBigBooostButton();
         setPower(leftPower, rightPower);
+        System.out.println("uh");
     }
 
     public void onStop()
