@@ -15,6 +15,9 @@ import static frc.robot.Constants.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.wpi.first.wpilibj.XboxController; // import xbox controller class
+import edu.wpi.first.wpilibj.GenericHID.Hand; // import hand class
+
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -38,6 +41,8 @@ public class Robot extends TimedRobot {
   private double autoTimer;
   private double prevTime;
 
+  private XboxController xbox; // this is the name of our xbox controller I think
+
   private List<Action> actions = new ArrayList<Action>();
 
   /**
@@ -52,6 +57,8 @@ public class Robot extends TimedRobot {
     drivetrain.init();
 
     drivetrain.setJoystick(mJoystick);
+
+    xbox = new XboxController(0); // creating a new object of XboxController
   }
 
   /**
@@ -62,7 +69,9 @@ public class Robot extends TimedRobot {
    * SmartDashboard integrated updating.
    */
   @Override
-  public void robotPeriodic() {}
+  public void robotPeriodic() {
+    SmartDashboard.putNumber("Left Joystick X", xbox.getX(Hand.kLeft)); // when you move the left joystick you get the x coordinates I believe    
+  }
 
   /**
    * This autonomous (along with the chooser code above) shows how to select between different
