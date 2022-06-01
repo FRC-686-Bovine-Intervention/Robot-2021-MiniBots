@@ -71,6 +71,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     SmartDashboard.putNumber("Left Joystick X", xbox.getX(Hand.kLeft)); // when you move the left joystick you get the x coordinates I believe    
+    System.out.println("The controller's axis count is: " + xbox.getAxisCount());
   }
 
   /**
