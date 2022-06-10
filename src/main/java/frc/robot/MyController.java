@@ -1,14 +1,14 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 
-public class MyJoystick extends Joystick{
-    public MyJoystick(int port){
+public class MyController extends XboxController {
+    public MyController(int port){
         super(port);
     }
 
     private static final int kXAxisID = 0;
-    private static final int kYAxisID = 1;
+    private static final int kYAxisID = 5;
 
 
     public double getXAxis(){

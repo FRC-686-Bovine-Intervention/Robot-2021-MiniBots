@@ -19,7 +19,7 @@ public class Drivetrain {
         return instance;
     }
 
-    private MyJoystick joystick;
+    private MyController controller;
 
     private TalonSRX leftMotor, rightMotor;
     private static final boolean kLeftInversion = false;
@@ -49,8 +49,8 @@ public class Drivetrain {
     }
 
     public void onLoop(){
-        double xInput = joystick.getXAxis();
-        double yInput = joystick.getYAxis();
+        double xInput = controller.getXAxis();
+        double yInput = controller.getYAxis();
         double leftPower = (yInput-xInput)/4;
         double rightPower = (yInput+xInput)/4;
         setPower(leftPower, rightPower);
@@ -66,7 +66,7 @@ public class Drivetrain {
         rightMotor.set(ControlMode.PercentOutput, rightPower);
     }
 
-    public void setJoystick(MyJoystick joystick){
-        this.joystick = joystick;
+    public void setController(MyController controller){
+        this.controller = controller;
     }
 }

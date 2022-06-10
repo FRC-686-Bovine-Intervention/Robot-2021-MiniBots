@@ -17,15 +17,13 @@ import static frc.robot.Constants.*;
  * project.
  */
 
-// Hello!
-
 public class Robot extends TimedRobot {
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
-  private MyJoystick mJoystick = new MyJoystick(kJoystickPort);
+  private MyController m_controller = new MyController(kControllerPort);
   private Drivetrain drivetrain = Drivetrain.getInstance();
 
   /**
@@ -39,7 +37,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Auto choices", m_chooser);
     drivetrain.init();
 
-    drivetrain.setJoystick(mJoystick);
+    drivetrain.setController(m_controller);
   }
 
   /**
