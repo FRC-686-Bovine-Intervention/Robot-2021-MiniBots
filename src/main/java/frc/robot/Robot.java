@@ -33,15 +33,13 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
-  private MyJoystick mJoystick = new MyJoystick(kJoystickPort);
+  private MyController m_controller = new MyController(kControllerPort);
   private Drivetrain drivetrain = Drivetrain.getInstance();
   private AutoManager autoManager = AutoManager.getInstance();
 
   private int direction;
   private double autoTimer;
   private double prevTime;
-
-  private XboxController xbox; // this is the name of our xbox controller I think
 
   private List<Action> actions = new ArrayList<Action>();
 
@@ -56,9 +54,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Auto choices", m_chooser);
     drivetrain.init();
 
-    drivetrain.setJoystick(mJoystick);
-
-    xbox = new XboxController(0); // creating a new object of XboxController
+    drivetrain.setController(m_controller);
   }
 
   /**
@@ -69,10 +65,7 @@ public class Robot extends TimedRobot {
    * SmartDashboard integrated updating.
    */
   @Override
-  public void robotPeriodic() {
-    SmartDashboard.putNumber("Left Joystick X", xbox.getX(Hand.kLeft)); // when you move the left joystick you get the x coordinates I believe    
-    System.out.println("The controller's axis count is: " + xbox.getAxisCount());
-  }
+  public void robotPeriodic() {}
 
   /**
    * This autonomous (along with the chooser code above) shows how to select between different
