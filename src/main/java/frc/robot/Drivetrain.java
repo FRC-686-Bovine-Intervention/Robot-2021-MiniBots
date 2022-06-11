@@ -1,85 +1,47 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
 package frc.robot;
 
-import static frc.robot.Constants.*;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
-public class Drivetrain 
-{
-    private static Drivetrain instance = null;
-    public static Drivetrain getInstance()
-    {
-        if(instance == null) {instance = new Drivetrain();}
-        return instance;
-    }
+import edu.wpi.first.wpilibj.PS4Controller;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-    private MyJoystick joystick;
+public class DriveTrain extends SubsystemBase {
 
-    public TalonSRX leftMotor, rightMotor;
-    private static final boolean kLeftInversion = false;
-    private static final boolean kLeftSensorPhase = false;
-    private static final boolean kRightInversion = false;
-    private static final boolean kRightSensorPhase = false;
+  private static DriveTrain instance = null;
+  public static DriveTrain getInstance(){
+      if(instance == null){
+          instance = new DriveTrain();
+      }
+      return instance;
+  }
 
+  /** Creates a new Drivetrain. */
+  private PS4Controller driverController = new PS4Controller(Constants.DRIVER_CONTROLLER_PORT);
+  
+  private TalonSRX LeftMotor = new TalonSRX(Constants.LEFT_MOTOR_1_ID);
+  private TalonSRX RightMotor = new TalonSRX(Constants.RIGHT_MOTOR_1_ID);
+ 
+  public void init(){
+    setPower(0,0);
+  }
 
-    private Drivetrain()
-    {
-        leftMotor = new TalonSRX(kLeftMotorID);
-        leftMotor.configFactoryDefault();
-        leftMotor.setInverted(kLeftInversion);
-        leftMotor.setNeutralMode(NeutralMode.Coast);
-        leftMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, kTalonPidIDx, kTalonTimeoutMs);
-        leftMotor.setSensorPhase(kLeftSensorPhase);
+  public void onLoop(){
+    double yPower = driverController.getLeftY();
+    double xPower = driverController.getLeftX();
+  
+    double leftPower = yPower-xPower;
+    double rightPower = yPower+xPower;
 
-        rightMotor = new TalonSRX(kRightMotorID);
-        rightMotor.configFactoryDefault();
-        rightMotor.setInverted(kRightInversion);
-        rightMotor.setNeutralMode(NeutralMode.Coast);
-        rightMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, kTalonPidIDx, kTalonTimeoutMs);
-        rightMotor.setSensorPhase(kRightSensorPhase);
-    }
-
-    public void init() //british be like
-    {
-        setPower(0, 0);
-    }
-
-    public void onLoop()
-    {    
-        if (joystick.getZeroButton()){leftMotor.setSelectedSensorPosition(0); rightMotor.setSelectedSensorPosition(0);}
-        double xInput = joystick.getXAxis();
-        double yInput = joystick.getYAxis();
-        double leftPower = (yInput+xInput)/-2;
-        double rightPower = (yInput-xInput)/2;
-        leftPower *= 1+1*joystick.getBigBooostButton();
-        rightPower *= 1+1*joystick.getBigBooostButton();
-        setPower(leftPower, rightPower);
-        System.out.println("uh");
-    }
-
-    public void onStop()
-    {
-        setPower(0, 0);
-    }
-
-    public void setPower(double leftPower, double rightPower)
-    {
-        leftMotor.set(ControlMode.PercentOutput, leftPower);
-        rightMotor.set(ControlMode.PercentOutput, rightPower);
-    }
-
-    public void setJoystick(MyJoystick joystick) {this.joystick = joystick;}
-
-    public double encoderUnitsToDegrees(double encoderUnits) {return encoderUnits/(1024*4/360);}
-
-    public double gearRatio(double degrees) {return degrees/3;}
-
-    public double degreesToDistance(double degrees) {return (Math.PI*degrees)/90;}
-
-    public double wheelsToAngle(double leftWheel, double rightWheel) {return 60;}
-
-    public double encoderUnitsToDistance(double encoderUnits) {return degreesToDistance(gearRatio(encoderUnitsToDegrees(encoderUnits)));}
+    setPower(leftPower,rightPower);
+  }
+  public void setPower(double LeftPower, double RightPower){
+    LeftMotor.set(ControlMode.PercentOutput, LeftPower);
+    RightMotor.set(ControlMode.PercentOutput, RightPower);
+  }
+  
 }
