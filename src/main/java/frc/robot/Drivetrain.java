@@ -23,8 +23,8 @@ public class DriveTrain extends SubsystemBase {
   /** Creates a new Drivetrain. */
   private PS4Controller driverController = new PS4Controller(Constants.DRIVER_CONTROLLER_PORT);
   
-  private TalonSRX LeftMotor = new TalonSRX(Constants.LEFT_MOTOR_1_ID);
-  private TalonSRX RightMotor = new TalonSRX(Constants.RIGHT_MOTOR_1_ID);
+  private TalonSRX LeftMotor = new TalonSRX(Constants.LEFT_MOTOR_ID);
+  private TalonSRX RightMotor = new TalonSRX(Constants.RIGHT_MOTOR_ID);
  
   public void init(){
     setPower(0,0);
