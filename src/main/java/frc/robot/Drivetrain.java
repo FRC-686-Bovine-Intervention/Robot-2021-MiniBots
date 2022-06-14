@@ -31,8 +31,8 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public void onLoop(){
-    double yPower = driverController.getLeftY();
-    double xPower = driverController.getLeftX();
+    double yPower = driverController.getLeftY()/4;
+    double xPower = driverController.getLeftX()/4;
   
     double leftPower = yPower-xPower;
     double rightPower = yPower+xPower;
@@ -42,6 +42,10 @@ public class DriveTrain extends SubsystemBase {
   public void setPower(double LeftPower, double RightPower){
     LeftMotor.set(ControlMode.PercentOutput, LeftPower);
     RightMotor.set(ControlMode.PercentOutput, RightPower);
+  }
+
+  public void stopMotor(){
+    setPower(0,0);
   }
   
 }

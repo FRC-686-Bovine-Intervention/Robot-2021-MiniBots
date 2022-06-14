@@ -4,13 +4,9 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-
-import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 
 /**
@@ -20,14 +16,10 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
  * project.
  */
 public class Robot extends TimedRobot {
+  
   private final Timer m_timer = new Timer();
 
-  private PS4Controller driverController = new PS4Controller(Constants.DRIVER_CONTROLLER_PORT);
-  
-  public TalonSRX LeftMotor = new TalonSRX(Constants.LEFT_MOTOR_ID);
-  public TalonSRX RightMotor = new TalonSRX(Constants.RIGHT_MOTOR_ID);
-
-  private final DifferentialDrive m_robotDrive = new DifferentialDrive(LeftMotor, RightMotor);
+  private DriveTrain drivetrain = new DriveTrain();
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -74,9 +66,9 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
     // Drive for 2 seconds
     if (m_timer.get() < 2.0) {
-      m_robotDrive.arcadeDrive(0.1, 0.0); // drive forwards tenth speed
+      drivetrain.setPower(0.1, 0.1); // drive forwards tenth speed
     } else {
-      m_robotDrive.stopMotor(); // stop robot
+      drivetrain.stopMotor(); // stop robot
     }
   }
 
@@ -92,7 +84,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    m_robotDrive.arcadeDrive(driverController.getLeftX()/4, driverController.getLeftY()/4);
+    drivetrain.onLoop();
   }
 
   @Override
