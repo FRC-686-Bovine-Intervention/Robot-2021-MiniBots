@@ -4,8 +4,14 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
+import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -14,8 +20,14 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  * project.
  */
 public class Robot extends TimedRobot {
-  public static DriveTrain driveTrain = new DriveTrain();
-  private DriveTrain drivetrain = DriveTrain.getInstance();
+  private final Timer m_timer = new Timer();
+
+  private PS4Controller driverController = new PS4Controller(Constants.DRIVER_CONTROLLER_PORT);
+  
+  public TalonSRX LeftMotor = new TalonSRX(Constants.LEFT_MOTOR_ID);
+  public TalonSRX RightMotor = new TalonSRX(Constants.RIGHT_MOTOR_ID);
+
+  private final DifferentialDrive m_robotDrive = new DifferentialDrive(LeftMotor, RightMotor);
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -53,14 +65,20 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    // m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
-    // schedule the autonomous command (example)
+    m_timer.reset();
+    m_timer.start();
   }
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    // Drive for 2 seconds
+    if (m_timer.get() < 2.0) {
+      m_robotDrive.arcadeDrive(0.1, 0.0); // drive forwards tenth speed
+    } else {
+      m_robotDrive.stopMotor(); // stop robot
+    }
+  }
 
   @Override
   public void teleopInit() {
@@ -68,12 +86,14 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    drivetrain.init();
+    
   }
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    m_robotDrive.arcadeDrive(driverController.getLeftX()/4, driverController.getLeftY()/4);
+  }
 
   @Override
   public void testInit() {
