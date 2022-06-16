@@ -86,7 +86,9 @@ public class Robot extends TimedRobot {
 
         } else {
 
-          drivetrain.stopMotor(); // stop robot
+          drivetrain.stopMotor(); // stop robot.
+
+          }
     }
   }
 

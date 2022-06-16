@@ -66,6 +66,10 @@ public class Drivetrain {
         rightMotor.set(ControlMode.PercentOutput, rightPower);
     }
 
+    public void stopMotor(){
+        setPower(0,0);
+      }
+
     public void setController(MyController controller){
         this.controller = controller;
     }
