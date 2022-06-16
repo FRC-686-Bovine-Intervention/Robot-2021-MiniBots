@@ -50,7 +50,10 @@ public class Robot extends TimedRobot {
    * SmartDashboard integrated updating.
    */
   @Override
-  public void robotPeriodic() {}
+  public void robotPeriodic() {
+    System.out.println(m_controller.getXAxis()); // print out X Axis
+    System.out.println(m_controller.getYAxis()); // print out Y Axis
+  }
 
   /**
    * This autonomous (along with the chooser code above) shows how to select between different
@@ -86,7 +89,7 @@ public class Robot extends TimedRobot {
 
         } else {
 
-          drivetrain.stopMotor(); // stop robot.
+          drivetrain.onStop(); // stop robot.
 
           }
     }

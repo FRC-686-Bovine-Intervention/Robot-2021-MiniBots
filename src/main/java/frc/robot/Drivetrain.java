@@ -14,7 +14,7 @@ public class Drivetrain {
     private static Drivetrain instance = null;
     public static Drivetrain getInstance(){
         if(instance == null){
-            instance = new Drivetrain();
+            instance = new Drivetrain(); // each time the code is deployed, create a new instance of Drivetrain
         }
         return instance;
     }
@@ -65,10 +65,6 @@ public class Drivetrain {
         leftMotor.set(ControlMode.PercentOutput, leftPower);
         rightMotor.set(ControlMode.PercentOutput, rightPower);
     }
-
-    public void stopMotor(){
-        setPower(0,0);
-      }
 
     public void setController(MyController controller){
         this.controller = controller;
