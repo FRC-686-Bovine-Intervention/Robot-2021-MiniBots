@@ -10,6 +10,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+
 public class DriveTrain extends SubsystemBase {
 
   private static DriveTrain instance = null;
@@ -25,11 +26,16 @@ public class DriveTrain extends SubsystemBase {
   
   public static TalonSRX LeftMotor = new TalonSRX(Constants.LEFT_MOTOR_ID);
   public static TalonSRX RightMotor = new TalonSRX(Constants.RIGHT_MOTOR_ID);
- 
+  
+  public DriveTrain(){
+    LeftMotor.setInverted(true);
+  }
+  
+  
   public void init(){
     setPower(0,0);
   }
-
+  
   public void onLoop(){
     double yPower = driverController.getLeftY()/4;
     double xPower = driverController.getLeftX()/4;
@@ -39,6 +45,9 @@ public class DriveTrain extends SubsystemBase {
 
     setPower(leftPower,rightPower);
   }
+  /**
+   * Sets the power of both motors based on a percent.
+   */
   public void setPower(double LeftPower, double RightPower){
     LeftMotor.set(ControlMode.PercentOutput, LeftPower);
     RightMotor.set(ControlMode.PercentOutput, RightPower);

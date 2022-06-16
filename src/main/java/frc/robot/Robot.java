@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Auto.Auto;
 import edu.wpi.first.wpilibj.Timer;
 
 
@@ -17,9 +18,9 @@ import edu.wpi.first.wpilibj.Timer;
  */
 public class Robot extends TimedRobot {
   
-  private final Timer m_timer = new Timer();
+  public final static Timer m_timer = new Timer();
 
-  private DriveTrain drivetrain = new DriveTrain();
+  public static DriveTrain drivetrain = new DriveTrain();
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -64,9 +65,8 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    // Drive for 2 seconds
     if (m_timer.get() < 2.0) {
-      drivetrain.setPower(0.1, 0.1); // drive forwards tenth speed
+      drivetrain.setPower(0.4, 0.4);
     } else {
       drivetrain.stopMotor(); // stop robot
     }
