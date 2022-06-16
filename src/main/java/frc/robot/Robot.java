@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -25,6 +26,7 @@ public class Robot extends TimedRobot {
 
   private MyController m_controller = new MyController(kControllerPort);
   private Drivetrain drivetrain = Drivetrain.getInstance();
+  private final Timer m_timer = new Timer();
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -76,8 +78,15 @@ public class Robot extends TimedRobot {
         break;
       case kDefaultAuto:
       default:
-        // Put default auto code here
-        break;
+        // Drive for 2 seconds
+
+        if (m_timer.get() < 2.0) {
+
+          drivetrain.arcadeDrive(0.5, 0.0); // drive forwards half speed
+
+        } else {
+
+          drivetrain.stopMotor(); // stop robot
     }
   }
 
