@@ -82,7 +82,7 @@ public class Robot extends TimedRobot {
 
         if (m_timer.get() < 2.0) {
 
-          drivetrain.arcadeDrive(0.5, 0.0); // drive forwards half speed
+          drivetrain.setPower(0.5, 0.5); // drive forwards half speed
 
         } else {
 
