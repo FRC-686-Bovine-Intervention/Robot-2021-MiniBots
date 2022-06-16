@@ -7,16 +7,8 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.auto.AutoManager;
-import frc.robot.auto.actions.Action;
 
 import static frc.robot.Constants.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import edu.wpi.first.wpilibj.XboxController; // import xbox controller class
-import edu.wpi.first.wpilibj.GenericHID.Hand; // import hand class
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -24,8 +16,6 @@ import edu.wpi.first.wpilibj.GenericHID.Hand; // import hand class
  * the package after creating this project, you must also update the build.gradle file in the
  * project.
  */
-
-// Hello!
 
 public class Robot extends TimedRobot {
   private static final String kDefaultAuto = "Default";
@@ -35,13 +25,6 @@ public class Robot extends TimedRobot {
 
   private MyController m_controller = new MyController(kControllerPort);
   private Drivetrain drivetrain = Drivetrain.getInstance();
-  private AutoManager autoManager = AutoManager.getInstance();
-
-  private int direction;
-  private double autoTimer;
-  private double prevTime;
-
-  private List<Action> actions = new ArrayList<Action>();
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -82,17 +65,12 @@ public class Robot extends TimedRobot {
     m_autoSelected = m_chooser.getSelected();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
-    direction = 0;
-    autoTimer = 1;
-    prevTime = 0;
-
-    autoManager.setActions(actions);
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    /*switch (m_autoSelected) {
+    switch (m_autoSelected) {
       case kCustomAuto:
         // Put custom auto code here
         break;
@@ -101,37 +79,6 @@ public class Robot extends TimedRobot {
         // Put default auto code here
         break;
     }
-    switch (direction)
-    {
-      case 0:
-        drivetrain.setPower(0.125, 0.125);
-      break;
-      case 1:
-        drivetrain.setPower(-0.125, 0.125);
-      break;
-      case 2:
-        drivetrain.setPower(-0.125, -0.125);
-      break;
-      case 3:
-        drivetrain.setPower(0.125, -0.125);
-      break;
-      default:
-        drivetrain.setPower(0, 0);
-      break;
-    }
-    if (autoTimer > 0)
-    {
-      autoTimer -= (System.currentTimeMillis()/1000-prevTime);
-    }
-    else
-    {
-      direction = (direction+1)%4;
-      autoTimer = 1;
-    }
-    prevTime = System.currentTimeMillis()/1000;
-    System.out.println(drivetrain.wheelsToAngle(drivetrain.degreesToDistance(drivetrain.encoderUnitsToDegrees(drivetrain.leftMotor.getSelectedSensorVelocity()/10)), drivetrain.degreesToDistance(drivetrain.encoderUnitsToDegrees(drivetrain.rightMotor.getSelectedSensorVelocity()/10))));
-    */
-    autoManager.runAuto();
   }
 
   /** This function is called once when teleop is enabled. */
@@ -144,8 +91,6 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     drivetrain.onLoop();
-    System.out.println("Left Motor " + drivetrain.encoderUnitsToDistance(drivetrain.leftMotor.getSelectedSensorPosition()) + " Right Motor " + drivetrain.encoderUnitsToDistance(drivetrain.rightMotor.getSelectedSensorPosition()));
-    //System.out.println("Robot Angle " + drivetrain.wheelsToAngle(drivetrain.encoderUnitsToDistance(drivetrain.leftMotor.getSelectedSensorPosition()), drivetrain.encoderUnitsToDistance(drivetrain.rightMotor.getSelectedSensorPosition())));
   }
 
   /** This function is called once when the robot is disabled. */
