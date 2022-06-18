@@ -50,9 +50,9 @@ public class Drivetrain {
 
     public void onLoop(){
         double xInput = controller.getXAxis();
-        double yInput = controller.getYAxis();
-        double leftPower = (yInput-xInput)/4;
-        double rightPower = (yInput+xInput)/4;
+        double yInput = -controller.getYAxis();
+        double leftPower = (yInput-xInput)/2;
+        double rightPower = (yInput+xInput)/2;
         setPower(leftPower, rightPower);
     }
 
