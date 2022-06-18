@@ -8,7 +8,7 @@ public class MyController extends PS4Controller {
     }
 
     private static final int kXAxisID = 0;
-    private static final int kYAxisID = 0;
+    private static final int kYAxisID = 1;
 
 
     public double getXAxis(){
