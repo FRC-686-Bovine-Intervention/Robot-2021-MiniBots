@@ -43,7 +43,7 @@ public class Drivetrain {
         rightMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, kTalonPidIDx, kTalonTimeoutMs);
         rightMotor.setSensorPhase(kRightSensorPhase);
     }
-
+    
     public void init(){
         setPower(0, 0);
     }
