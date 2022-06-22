@@ -19,16 +19,15 @@ public class Drivetrain {
         return instance;
     }
 
-    private MyController controller;
+    private MyController controller; // controller field
 
-    private TalonSRX leftMotor, rightMotor;
+    private TalonSRX leftMotor, rightMotor; // instance fields
     private static final boolean kLeftInversion = false;
     private static final boolean kLeftSensorPhase = false;
     private static final boolean kRightInversion = true;
     private static final boolean kRightSensorPhase = false;
 
-
-    private Drivetrain(){
+    private Drivetrain(){ // Drivetrain constructor
         leftMotor = new TalonSRX(kLeftMotorID);
         leftMotor.configFactoryDefault();
         leftMotor.setInverted(kLeftInversion);
@@ -68,5 +67,12 @@ public class Drivetrain {
 
     public void setController(MyController controller){
         this.controller = controller;
+    }
+
+    public double getEncoderTicks(){
+        return rightMotor.getSelectedSensorPosition();
+    }
+    public double getDistance(){
+        return rightMotor.getSelectedSensorPosition()/11800.0*4.0*Math.PI;
     }
 }
