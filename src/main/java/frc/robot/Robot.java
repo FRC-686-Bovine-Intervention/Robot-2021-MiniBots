@@ -84,10 +84,10 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
 
-    // Drives forward at half speed until the robot has moved 3 feet, then stops:
+    // Drives forward at 1/5 speed until the robot has moved 3 feet, then stops:
 
-    if (encoder.getDistance() < 3) {
-      drivetrain.setPower(0.5, 0.5);
+    if (encoder.getDistance() < 1) {
+      drivetrain.setPower(0.2, 0.2);
     } else {
       drivetrain.onStop();
     }

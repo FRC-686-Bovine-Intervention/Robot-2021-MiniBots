@@ -43,7 +43,7 @@ public class Drivetrain {
         rightMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, kTalonPidIDx, kTalonTimeoutMs);
         rightMotor.setSensorPhase(kRightSensorPhase);
     }
-    
+
     public void init(){
         setPower(0, 0);
     }
@@ -51,8 +51,8 @@ public class Drivetrain {
     public void onLoop(){
         double xInput = controller.getXAxis();
         double yInput = -controller.getYAxis();
-        double leftPower = (yInput-xInput)/2;
-        double rightPower = (yInput+xInput)/2;
+        double leftPower = (yInput-xInput)/4;
+        double rightPower = (yInput+xInput)/4;
         setPower(leftPower, rightPower);
     }
 
