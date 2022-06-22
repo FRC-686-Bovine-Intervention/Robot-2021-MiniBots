@@ -7,7 +7,6 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.Encoder;
 
 import static frc.robot.Constants.*;
 
@@ -29,10 +28,6 @@ public class Robot extends TimedRobot {
   private MyController m_controller = new MyController(kControllerPort);
   private Drivetrain drivetrain = Drivetrain.getInstance();
 
-  // Creates an encoder on DIO ports 0 and 1
-  
-  Encoder encoder = new Encoder(0, 1);
-
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -45,12 +40,6 @@ public class Robot extends TimedRobot {
     drivetrain.init();
 
     drivetrain.setController(m_controller);
-
-    // Configures the encoder's distance-per-pulse
-    // The robot moves forward 1 foot per encoder rotation
-    // There are 256 pulses per encoder rotation
-
-    encoder.setDistancePerPulse(1./256.);
   }
 
   /**
@@ -84,9 +73,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
 
-    // Drives forward at 1/5 speed until the robot has moved 3 feet, then stops:
-
-    if (encoder.getDistance() < 1) {
+    if (drivetrain.getDistance() < 2) {
       drivetrain.setPower(0.2, 0.2);
     } else {
       drivetrain.onStop();
