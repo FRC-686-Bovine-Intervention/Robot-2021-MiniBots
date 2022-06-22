@@ -34,6 +34,7 @@ public class Drivetrain {
         leftMotor.setNeutralMode(NeutralMode.Coast);
         leftMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, kTalonPidIDx, kTalonTimeoutMs);
         leftMotor.setSensorPhase(kLeftSensorPhase);
+        leftMotor.getSelectedSensorPosition();
 
         rightMotor = new TalonSRX(kRightMotorID);
         rightMotor.configFactoryDefault();
@@ -41,6 +42,7 @@ public class Drivetrain {
         rightMotor.setNeutralMode(NeutralMode.Coast);
         rightMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, kTalonPidIDx, kTalonTimeoutMs);
         rightMotor.setSensorPhase(kRightSensorPhase);
+        rightMotor.getSelectedSensorPosition();
     }
 
     public void init(){
@@ -67,5 +69,12 @@ public class Drivetrain {
 
     public void setController(MyController controller){
         this.controller = controller;
+    }
+
+    public double getDistance(){
+        // return rightMotor.getSelectedSensorPosition()*encoderUnitsToDegrees()*degreesToTraveledInches(); // What I thought
+        
+        return (degreesToTraveledInches(encoderUnitsToDegrees(leftMotor.getSelectedSensorPosition())) // this will average the left and right motor,
+        +degreesToTraveledInches(encoderUnitsToDegrees(rightMotor.getSelectedSensorPosition())))/2; // so turning the robot will not effect the distance, unless it travels in an arc
     }
 }
