@@ -71,15 +71,7 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {
-
-    if (drivetrain.getDistance() < 2) {
-      drivetrain.setPower(0.2, 0.2);
-    } else {
-      drivetrain.onStop();
-    }
-
-  }
+  public void autonomousPeriodic() {}
 
   /** This function is called once when teleop is enabled. */
   @Override

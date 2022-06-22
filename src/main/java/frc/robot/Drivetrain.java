@@ -68,11 +68,4 @@ public class Drivetrain {
     public void setController(MyController controller){
         this.controller = controller;
     }
-
-    public double getEncoderTicks(){
-        return rightMotor.getSelectedSensorPosition();
-    }
-    public double getDistance(){
-        return rightMotor.getSelectedSensorPosition()/11800.0*4.0*Math.PI;
-    }
 }
