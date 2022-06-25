@@ -65,20 +65,24 @@ public class Robot extends TimedRobot {
     m_autoSelected = m_chooser.getSelected();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
+
+    drivetrain.setSelectedSensorPos(0);
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    switch (m_autoSelected) {
-      case kCustomAuto:
-        // Put custom auto code here
-        break;
-      case kDefaultAuto:
-      default:
-        // Put default auto code here
-        break;
-    }
+    
+    System.out.println(drivetrain.getDistance());
+
+    // if (drivetrain.getDistance() < 24){
+    //   drivetrain.setPower(0.3, 0.3);
+    // }
+    // else
+    // {
+    //   drivetrain.setPower(0, 0);
+    // }
+
   }
 
   /** This function is called once when teleop is enabled. */

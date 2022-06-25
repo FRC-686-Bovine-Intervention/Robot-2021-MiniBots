@@ -22,10 +22,10 @@ public class Drivetrain {
     private MyController controller;
 
     private TalonSRX leftMotor, rightMotor;
-    private static final boolean kLeftInversion = false;
+    private static final boolean kLeftInversion = true;
     private static final boolean kLeftSensorPhase = false;
-    private static final boolean kRightInversion = true;
-    private static final boolean kRightSensorPhase = false;
+    private static final boolean kRightInversion = false;
+    private static final boolean kRightSensorPhase = true;
 
 
     private Drivetrain(){
@@ -51,8 +51,8 @@ public class Drivetrain {
     public void onLoop(){
         double xInput = controller.getXAxis();
         double yInput = controller.getYAxis();
-        double leftPower = (yInput-xInput)/4;
-        double rightPower = (yInput+xInput)/4;
+        double leftPower = (yInput+xInput)/4;
+        double rightPower = (yInput-xInput)/4;
         setPower(leftPower, rightPower);
     }
 
@@ -66,7 +66,18 @@ public class Drivetrain {
         rightMotor.set(ControlMode.PercentOutput, rightPower);
     }
 
+    public double getDistance(){
+        // return (degreesToTraveledInches(encoderUnitsToDegrees(leftMotor.getSelectedSensorPosition())) // this will average the left and right motor,
+        // +degreesToTraveledInches(encoderUnitsToDegrees(rightMotor.getSelectedSensorPosition())))/2;
+        return leftMotor.getSelectedSensorPosition();
+    }
+
     public void setController(MyController controller){
         this.controller = controller;
+    }
+
+    public void setSelectedSensorPos(double pos){
+        leftMotor.setSelectedSensorPosition(pos);
+        rightMotor.setSelectedSensorPosition(pos);
     }
 }

@@ -16,6 +16,6 @@ public class MyController extends XboxController {
     }
 
     public double getYAxis(){
-        return getRawAxis(kYAxisID);
+        return -getRawAxis(kYAxisID);
     }
 }
